@@ -1,0 +1,24 @@
+# fly.toml
+
+
+app = "aneunsori"
+primary_region = "nrt"       # 도쿄 (한국에서 가장 가까운 리전)
+
+[build]
+  dockerfile = "Dockerfile"
+
+[http_service]
+  internal_port = 80
+  force_https = true         # HTTP → HTTPS 자동 리다이렉트
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+
+[[vm]]
+  size = "shared-cpu-1x"    # 무료 티어 VM
+  memory = "256mb"
+
+# 영구 볼륨 (content, cache, users, history 데이터 보존)
+[[mounts]]
+  source = "wiki_data"       # fly volumes create wiki_data 로 생성
+  destination = "/mnt/wiki-data"

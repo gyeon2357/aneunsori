@@ -1,0 +1,13 @@
+# 런타임 데이터 (Fly.io 볼륨에서 관리)
+/cache/*
+/users/*
+/history/*
+
+# .gitkeep은 유지 (빈 폴더 추적용)
+!/cache/.gitkeep
+!/users/.gitkeep
+!/history/.gitkeep
+
+# macOS
+.DS_Store
+__MACOSX/
