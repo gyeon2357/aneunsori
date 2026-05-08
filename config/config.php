@@ -8,5 +8,5 @@ define('BASE_URL', '');
 define('THEME', 'starter');
 define('LANGUAGE', 'ko');
 define('TIMEZONE', 'Asia/Seoul');
-define('HOME_PAGE', '처음');
+define('HOME_PAGE', 'Home');
 define('EDIT_PERMISSION', 'private');
