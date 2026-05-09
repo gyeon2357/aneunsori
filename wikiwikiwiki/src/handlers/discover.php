@@ -84,32 +84,14 @@ function handle_my_pages(string $method, array $matches): void
 {
     require_get_method($method);
     require_login();
-
+ 
     $username = (string) current_user();
-    $files = glob(HISTORY_DIR . '/*.' . $username . '.txt') ?: [];
-    rsort($files);
-
-    $pageIndex = page_index_load();
-    $debug = [];
-
-    foreach (array_slice($files, 0, 3) as $file) {
-        $basename    = basename($file, '.txt');
-        $withoutUser = substr($basename, 0, strlen($basename) - strlen('.' . $username));
-        $matched     = preg_match('/^(.+)\.(\d{14})$/', $withoutUser, $m);
-        $title       = $matched ? file_to_page_title($m[1] . '.txt') : '(no match)';
-        $inIndex     = $matched ? array_key_exists($title, $pageIndex) : false;
-
-        $debug[] = [
-            'basename'    => $basename,
-            'withoutUser' => $withoutUser,
-            'matched'     => (bool) $matched,
-            'title'       => $title,
-            'inIndex'     => $inIndex,
-        ];
-    }
-
-    echo '<pre>';
-    print_r($debug);
-    echo '</pre>';
-    exit;
+ 
+    render('my-pages', [
+        'pageTitle' => '내가 쓴 글',
+        'metaTitle' => '내가 쓴 글',
+        'username'  => $username,
+        'myPages'   => page_by_author($username),
+    ]);
 }
+ 
