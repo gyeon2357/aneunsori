@@ -39,13 +39,12 @@ function parse_custom_tags(string $content, array &$placeholders, int &$counter,
         'recent' => true,
         'wanted' => true,
         'random' => true,
-        'orphan' => true,
+        'byauthor' => true,
     ];
     $listTags = [
         'recent' => true,
         'wanted' => true,
         'random' => true,
-        'orphan' => true,
     ];
 
     $length = strlen($content);
@@ -191,7 +190,10 @@ function parse_custom_tags(string $content, array &$placeholders, int &$counter,
             $html = render_embed_arena($value, $original);
         } elseif ($type === 'google') {
             $html = render_embed_google($value, $original);
-        } else {
+        } elseif ($type === 'byauthor') {
+            $html = render_embed_byauthor($value, $original);
+        }
+        else {
             $html = render_embed_wikipedia($value, $original);
         }
 

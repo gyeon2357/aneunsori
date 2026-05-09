@@ -59,15 +59,15 @@ function page_orphaned(?int $limit = null, bool $reset = false): array
             }
         }
 
-       $hasBacklinks = [];
-            foreach (page_related_index_load() as $sourceTitle => $entry) {
-                 if (!is_array($entry)) {
-                 continue;
-                 }
-            $sourceTitle = (string) $sourceTitle;
-                 if ($sourceTitle === '') {
-                 continue;
-             }
+        $hasBacklinks = [];
+        foreach (page_related_index_load() as $entry) {
+            if (!is_array($entry)) {
+                continue;
+            }
+            $sourceTitle = (string) ($entry['title'] ?? '');
+            if ($sourceTitle === '') {
+                continue;
+            }
             $links = isset($entry['links']) && is_array($entry['links']) ? $entry['links'] : [];
             foreach ($links as $linked) {
                 $linkedTitle = trim((string) $linked);
@@ -339,13 +339,13 @@ function page_by_author(string $username): array
         return [];
     }
  
-
+   
     $files = glob(HISTORY_DIR . '/*.' . $username . '.txt');
     if ($files === false || $files === []) {
         return [];
     }
  
-    rsort($files); 
+    rsort($files);
  
     $seen      = [];
     $pages     = [];
@@ -377,4 +377,54 @@ function page_by_author(string $username): array
     }
  
     return $pages;
+}
+
+function page_all_by_author(?int $limitPerPage = null): array
+{
+    $files = glob(HISTORY_DIR . '/*.txt');
+    if ($files === false || $files === []) {
+        return [];
+    }
+
+    rsort($files);
+
+    $pageIndex = page_index_load();
+    $homePage  = defined('HOME_PAGE') ? (string) HOME_PAGE : '';
+    $byAuthor  = [];
+
+    foreach ($files as $file) {
+        $basename = basename($file, '.txt');
+
+        // {base}.{14자리}.{username} 구조 파싱
+        if (preg_match('/^(.+)\.(\d{14})\.([^.]+)$/', $basename, $m) !== 1) {
+            continue;
+        }
+
+        $username = $m[3];
+        $title    = file_to_page_title($m[1] . '.txt');
+
+        if ($title === '' || $title === $homePage) {
+            continue;
+        }
+        if (!array_key_exists($title, $pageIndex)) {
+            continue;
+        }
+        if (page_index_redirect_target_for($title, $pageIndex) !== null) {
+            continue;
+        }
+        if (isset($byAuthor[$username]) && in_array($title, array_column($byAuthor[$username], 'title'), true)) {
+            continue;
+        }
+
+        $byAuthor[$username][] = ['title' => $title];
+    }
+
+    if ($limitPerPage !== null) {
+        foreach ($byAuthor as $author => $pages) {
+            $byAuthor[$author] = array_slice($pages, 0, $limitPerPage);
+        }
+    }
+
+    ksort($byAuthor, SORT_NATURAL | SORT_FLAG_CASE);
+    return $byAuthor;
 }

@@ -276,33 +276,21 @@ function render_embed_list(string $type, string $value, string $original): strin
     }
     $limit = min($limit, PAGE_LIST_LIMIT);
 
-   $homePage = defined('HOME_PAGE') ? (string) HOME_PAGE : '';
-
-if ($type === 'recent') {
-    $pages = page_recent_without_redirects($limit);
-    if ($homePage !== '') {
-        $pages = array_values(array_filter($pages, static fn(array $p): bool => ($p['title'] ?? '') !== $homePage));
+    if ($type === 'recent') {
+        $pages = page_recent_without_redirects($limit);
+        $homePage = defined('HOME_PAGE') ? (string) HOME_PAGE : '';
+        if ($homePage !== '') {
+            $pages = array_values(array_filter($pages, static fn(array $p): bool => ($p['title'] ?? '') !== $homePage));
+        }
+    } elseif ($type === 'wanted') {
+        $pages = page_wanted($limit);
+    } else {
+        $pages = page_random($limit);
     }
-} elseif ($type === 'wanted') {
-    $pages = page_wanted($limit);
-} elseif ($type === 'orphan') {
-    $raw = page_orphaned();
-    if ($homePage !== '') {
-        $raw = array_values(array_filter($raw, static fn(string $t): bool => $t !== $homePage));
-    }
-    $pages = array_map(
-        static fn(string $t): array => ['title' => $t],
-        array_slice($raw, 0, $limit),
-    );
-} else {
-    $pages = page_random($limit);
-    if ($homePage !== '') {
-        $pages = array_values(array_filter($pages, static fn(array $p): bool => ($p['title'] ?? '') !== $homePage));
-    }
-}
 
-
-  
+    if ($pages === []) {
+        return '';
+    }
 
     $html = '<ul data-columns>';
     foreach ($pages as $item) {
@@ -323,5 +311,30 @@ if ($type === 'recent') {
         $html .= '<li><a href="' . html(url($title)) . '">' . $titleHtml . '</a></li>';
     }
     $html .= '</ul>';
+    return $html;
+}
+
+function render_embed_byauthor(string $value, string $original): string
+{
+    $limit  = (int) $value;
+    $limit  = ($limit > 0) ? min($limit, PAGE_LIST_LIMIT) : null;
+    $groups = page_all_by_author($limit);
+
+    if ($groups === []) {
+        return '';
+    }
+
+    $html = '';
+    foreach ($groups as $username => $pages) {
+        $html .= '<h3>' . html((string) $username) . '</h3>';
+        $html .= '<ul data-columns>';
+        foreach ($pages as $page) {
+            $title = (string) ($page['title'] ?? '');
+            if ($title === '') continue;
+            $html .= '<li><a href="' . html(url($title)) . '">' . html($title) . '</a></li>';
+        }
+        $html .= '</ul>';
+    }
+
     return $html;
 }
