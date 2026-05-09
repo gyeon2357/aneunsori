@@ -87,13 +87,29 @@ function handle_my_pages(string $method, array $matches): void
 
     $username = (string) current_user();
     $files = glob(HISTORY_DIR . '/*.' . $username . '.txt') ?: [];
+    rsort($files);
 
-    // 디버그 출력
+    $pageIndex = page_index_load();
+    $debug = [];
+
+    foreach (array_slice($files, 0, 3) as $file) {
+        $basename    = basename($file, '.txt');
+        $withoutUser = substr($basename, 0, strlen($basename) - strlen('.' . $username));
+        $matched     = preg_match('/^(.+)\.(\d{14})$/', $withoutUser, $m);
+        $title       = $matched ? file_to_page_title($m[1] . '.txt') : '(no match)';
+        $inIndex     = $matched ? array_key_exists($title, $pageIndex) : false;
+
+        $debug[] = [
+            'basename'    => $basename,
+            'withoutUser' => $withoutUser,
+            'matched'     => (bool) $matched,
+            'title'       => $title,
+            'inIndex'     => $inIndex,
+        ];
+    }
+
     echo '<pre>';
-    echo 'HISTORY_DIR: ' . HISTORY_DIR . "\n";
-    echo 'username: ' . $username . "\n";
-    echo 'matched files: ' . count($files) . "\n";
-    print_r($files);
+    print_r($debug);
     echo '</pre>';
     exit;
 }
