@@ -9,4 +9,4 @@ define('THEME', 'starter');
 define('LANGUAGE', 'ko');
 define('TIMEZONE', 'Asia/Seoul');
 define('HOME_PAGE', 'Home');
-define('EDIT_PERMISSION', 'private');
+define('EDIT_PERMISSION', 'public');
