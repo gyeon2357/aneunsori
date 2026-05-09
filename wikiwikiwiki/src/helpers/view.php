@@ -128,7 +128,7 @@ function base_menu_items(string $currentRequestUri): array
             'shortcut' => 'new',
         ];
         $items[] = [
-            'href'     => url('/my-pages'),
+            'href'     => url('/mypages'),
             'label'    => t('nav.mypages'),
             'shortcut' => '',
         ];

@@ -222,6 +222,19 @@ button {
   -webkit-user-select: none;
   user-select: none;
 }
+
+@media screen and (max-width: 899px) {
+  .header {
+    position: sticky;
+    top: 1rem;
+    width: 100%;
+    /* margin: 0 -1.25rem; */
+    /* transform: translateX(-50%); */
+    /* left: calc(50% + 1.25rem); */
+    z-index: 1;
+  }
+}
+
 .header a {
   display: flex;
   align-items: center;
