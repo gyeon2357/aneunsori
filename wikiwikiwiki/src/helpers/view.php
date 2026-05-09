@@ -115,59 +115,64 @@ function base_menu_items(string $currentRequestUri): array
     $returnPath = rawurlencode($currentRequestUri);
     $items = [
         [
-            'href' => url('/discover'),
-            'label' => t('nav.discover'),
+            'href'     => url('/discover'),
+            'label'    => t('nav.discover'),
             'shortcut' => '',
         ],
     ];
-
+ 
     if (is_logged_in()) {
         $items[] = [
-            'href' => url('/new'),
-            'label' => t('nav.new'),
+            'href'     => url('/new'),
+            'label'    => t('nav.new'),
             'shortcut' => 'new',
         ];
         $items[] = [
-            'href' => url('/account'),
-            'label' => t('nav.account'),
+            'href'     => url('/account'),
+            'label'    => t('nav.account'),
             'shortcut' => '',
         ];
         if (is_admin()) {
             $items[] = [
-                'href' => url('/settings'),
-                'label' => t('nav.settings'),
+                'href'     => url('/settings'),
+                'label'    => t('nav.settings'),
                 'shortcut' => '',
             ];
         }
+        $items[] = [                                 // ← 추가
+            'href'     => url('/my-pages'),
+            'label'    => '내가 쓴 글',
+            'shortcut' => '',
+        ];
         $items[] = [
-            'href' => url('/logout') . '?page=' . $returnPath,
-            'label' => t('nav.logout'),
+            'href'     => url('/logout') . '?page=' . $returnPath,
+            'label'    => t('nav.logout'),
             'shortcut' => '',
         ];
         return $items;
     }
-
+ 
     if (is_fully_public()) {
         $items[] = [
-            'href' => url('/new'),
-            'label' => t('nav.new'),
+            'href'     => url('/new'),
+            'label'    => t('nav.new'),
             'shortcut' => 'new',
         ];
     }
-
+ 
     $items[] = [
-        'href' => url('/login') . '?page=' . $returnPath,
-        'label' => t('nav.login'),
+        'href'     => url('/login') . '?page=' . $returnPath,
+        'label'    => t('nav.login'),
         'shortcut' => '',
     ];
-
+ 
     if (can_register()) {
         $items[] = [
-            'href' => url('/register'),
-            'label' => t('nav.register'),
+            'href'     => url('/register'),
+            'label'    => t('nav.register'),
             'shortcut' => '',
         ];
     }
-
+ 
     return $items;
 }

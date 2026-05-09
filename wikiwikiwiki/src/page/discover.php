@@ -331,3 +331,50 @@ function page_by_tag(string $tag): array
 
     return $pages;
 }
+
+
+function page_by_author(string $username): array
+{
+    if ($username === '') {
+        return [];
+    }
+ 
+
+    $files = glob(HISTORY_DIR . '/*.' . $username . '.txt');
+    if ($files === false || $files === []) {
+        return [];
+    }
+ 
+    rsort($files); 
+ 
+    $seen      = [];
+    $pages     = [];
+    $pageIndex = page_index_load();
+ 
+    foreach ($files as $file) {
+        $basename    = basename($file, '.txt');        
+        $withoutUser = substr($basename, 0, strlen($basename) - strlen('.' . $username));
+ 
+        if (preg_match('/^(.+)\.(\d{14})$/', $withoutUser, $m) !== 1) {
+            continue;
+        }
+ 
+        $title = file_to_page_title($m[1] . '.txt');    
+ 
+        if ($title === '' || isset($seen[$title])) {
+            continue;
+        }
+        $seen[$title] = true;
+ 
+        if (!array_key_exists($title, $pageIndex)) {
+            continue;
+        }
+        if (page_index_redirect_target_for($title, $pageIndex) !== null) {
+            continue;
+        }
+ 
+        $pages[] = ['title' => $title];
+    }
+ 
+    return $pages;
+}

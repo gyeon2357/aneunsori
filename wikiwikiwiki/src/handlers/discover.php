@@ -79,6 +79,7 @@ function handle_tag_pages(string $method, array $matches): void
     ]);
 }
 
+
 function handle_my_pages(string $method, array $matches): void
 {
     require_get_method($method);
@@ -87,9 +88,10 @@ function handle_my_pages(string $method, array $matches): void
     $username = (string) current_user();
  
     render('my-pages', [
-        'pageTitle'  => '내가 쓴 글',
-        'metaTitle'  => '내가 쓴 글',
-        'username'   => $username,
-        'myPages'    => page_by_author($username),
+        'pageTitle' => '내가 쓴 글',
+        'metaTitle' => '내가 쓴 글',
+        'username'  => $username,
+        'myPages'   => page_by_author($username),
     ]);
 }
+ 
