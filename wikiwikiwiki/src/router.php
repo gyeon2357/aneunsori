@@ -84,6 +84,7 @@ $router->any('/logout', 'handle_logout');
 $router->any('/install', 'handle_install');
 $router->any('/register', 'handle_register');
 $router->any('/account', 'handle_account');
+$router->any('/my-pages', 'handle_my_pages');
 
 $router->any('/settings', 'handle_settings');
 

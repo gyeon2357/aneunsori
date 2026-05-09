@@ -50,6 +50,9 @@
             <?php foreach ($menuItems as $menuItem): ?>
               <li><a href="<?= html((string) $menuItem['href']) ?>"<?= ((string) $menuItem['shortcut']) !== '' ? ' data-shortcut="' . html((string) $menuItem['shortcut']) . '"' : '' ?>><?= html((string) $menuItem['label']) ?></a></li>
             <?php endforeach ?>
+            <?php if (is_logged_in()): ?>
+  <li><a href="<?= html(url('/my-pages')) ?>">내가 쓴 글</a></li>
+<?php endif ?>
           </menu>
         </details>
       </nav>

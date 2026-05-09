@@ -275,3 +275,56 @@ function page_random(int $limit = 10): array
         array_slice($pages, 0, $limit),
     );
 }
+
+
+function page_by_author(string $username): array
+{
+    if ($username === '') {
+        return [];
+    }
+ 
+    // 히스토리 파일명 규칙: {base}-{14자리타임스탬프}-{username}.txt
+    $files = glob(HISTORY_DIR . '/*-' . $username . '.txt');
+    if ($files === false || $files === []) {
+        return [];
+    }
+ 
+    // 파일명 기준 내림차순 정렬 → 최근 편집 순
+    rsort($files);
+ 
+    $seen   = [];
+    $pages  = [];
+    $pageIndex = page_index_load();
+ 
+    foreach ($files as $file) {
+        $basename = basename($file, '.txt');
+ 
+        // -{username} 접미사 제거
+        $withoutUser = substr($basename, 0, strlen($basename) - strlen($username) - 1);
+ 
+        // -{14자리타임스탬프} 제거 후 base 추출
+        if (preg_match('/^(.+)-\d{14}$/', $withoutUser, $m) !== 1) {
+            continue;
+        }
+ 
+        // base → title 역변환 (title_to_filename 역)
+        $title = str_replace('--', '/', $m[1]);
+ 
+        if (isset($seen[$title])) {
+            continue;
+        }
+        $seen[$title] = true;
+ 
+        // 존재하지 않거나 리다이렉트인 페이지 제외
+        if (!array_key_exists($title, $pageIndex)) {
+            continue;
+        }
+        if (page_index_redirect_target_for($title, $pageIndex) !== null) {
+            continue;
+        }
+ 
+        $pages[] = ['title' => $title];
+    }
+ 
+    return $pages;
+}
