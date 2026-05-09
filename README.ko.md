@@ -80,8 +80,8 @@ Nginx를 사용하는 경우 `nginx.example.conf` 참고
 |---|---|---|---|
 | `(image: URL)` | 이미지 | `width`, `height`, `caption` | `(image: URL width: 300px caption: 체리)` |
 | `(video: URL)` | 동영상(YouTube, Vimeo 등) | `width`, `height` | `(video: URL width: 80%)` |
-| `(google: URL)` | 구글 검색결과 |
 | `(iframe: URL)` | `iframe`(`https://`만) | `width`, `height` | `(iframe: URL height: 400px)` |
+| `(google: 검색어)` | 구글 검색결과 | | `(google: Weezer)` |
 | `(map: 주소)` | 구글 지도 | `width`, `height` | `(map: 서울 강남구)` |
 | `(codepen: URL)` | CodePen | `width`, `height` | `(codepen: URL)` |
 | `(arena: URL)` | Are.na 채널 | `width`, `height` | `(arena: username/channel-name)` |
