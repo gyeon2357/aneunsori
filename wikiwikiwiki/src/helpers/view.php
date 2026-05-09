@@ -129,7 +129,7 @@ function base_menu_items(string $currentRequestUri): array
         ];
         $items[] = [
             'href'     => url('/my-pages'),
-            'label'    => '내가 쓴 글',
+            'label'    => t('nav.mypages'),
             'shortcut' => '',
         ];
         $items[] = [
