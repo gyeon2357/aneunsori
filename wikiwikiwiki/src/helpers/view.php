@@ -128,6 +128,11 @@ function base_menu_items(string $currentRequestUri): array
             'shortcut' => 'new',
         ];
         $items[] = [
+            'href'     => url('/my-pages'),
+            'label'    => '내가 쓴 글',
+            'shortcut' => '',
+        ];
+        $items[] = [
             'href'     => url('/account'),
             'label'    => t('nav.account'),
             'shortcut' => '',
@@ -139,11 +144,6 @@ function base_menu_items(string $currentRequestUri): array
                 'shortcut' => '',
             ];
         }
-        $items[] = [                                 // ← 추가
-            'href'     => url('/my-pages'),
-            'label'    => '내가 쓴 글',
-            'shortcut' => '',
-        ];
         $items[] = [
             'href'     => url('/logout') . '?page=' . $returnPath,
             'label'    => t('nav.logout'),

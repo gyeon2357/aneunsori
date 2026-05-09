@@ -59,15 +59,15 @@ function page_orphaned(?int $limit = null, bool $reset = false): array
             }
         }
 
-        $hasBacklinks = [];
-        foreach (page_related_index_load() as $entry) {
-            if (!is_array($entry)) {
-                continue;
-            }
-            $sourceTitle = (string) ($entry['title'] ?? '');
-            if ($sourceTitle === '') {
-                continue;
-            }
+       $hasBacklinks = [];
+            foreach (page_related_index_load() as $sourceTitle => $entry) {
+                 if (!is_array($entry)) {
+                 continue;
+                 }
+            $sourceTitle = (string) $sourceTitle;
+                 if ($sourceTitle === '') {
+                 continue;
+             }
             $links = isset($entry['links']) && is_array($entry['links']) ? $entry['links'] : [];
             foreach ($links as $linked) {
                 $linkedTitle = trim((string) $linked);

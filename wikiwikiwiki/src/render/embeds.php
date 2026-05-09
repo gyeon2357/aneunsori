@@ -276,21 +276,33 @@ function render_embed_list(string $type, string $value, string $original): strin
     }
     $limit = min($limit, PAGE_LIST_LIMIT);
 
-    if ($type === 'recent') {
-        $pages = page_recent_without_redirects($limit);
-        $homePage = defined('HOME_PAGE') ? (string) HOME_PAGE : '';
-        if ($homePage !== '') {
-            $pages = array_values(array_filter($pages, static fn(array $p): bool => ($p['title'] ?? '') !== $homePage));
-        }
-    } elseif ($type === 'wanted') {
-        $pages = page_wanted($limit);
-    } else {
-        $pages = page_random($limit);
-    }
+   $homePage = defined('HOME_PAGE') ? (string) HOME_PAGE : '';
 
-    if ($pages === []) {
-        return '';
+if ($type === 'recent') {
+    $pages = page_recent_without_redirects($limit);
+    if ($homePage !== '') {
+        $pages = array_values(array_filter($pages, static fn(array $p): bool => ($p['title'] ?? '') !== $homePage));
     }
+} elseif ($type === 'wanted') {
+    $pages = page_wanted($limit);
+} elseif ($type === 'orphan') {
+    $raw = page_orphaned();
+    if ($homePage !== '') {
+        $raw = array_values(array_filter($raw, static fn(string $t): bool => $t !== $homePage));
+    }
+    $pages = array_map(
+        static fn(string $t): array => ['title' => $t],
+        array_slice($raw, 0, $limit),
+    );
+} else {
+    $pages = page_random($limit);
+    if ($homePage !== '') {
+        $pages = array_values(array_filter($pages, static fn(array $p): bool => ($p['title'] ?? '') !== $homePage));
+    }
+}
+
+
+  
 
     $html = '<ul data-columns>';
     foreach ($pages as $item) {

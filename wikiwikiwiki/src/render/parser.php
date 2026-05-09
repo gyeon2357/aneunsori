@@ -39,11 +39,13 @@ function parse_custom_tags(string $content, array &$placeholders, int &$counter,
         'recent' => true,
         'wanted' => true,
         'random' => true,
+        'orphan' => true,
     ];
     $listTags = [
         'recent' => true,
         'wanted' => true,
         'random' => true,
+        'orphan' => true,
     ];
 
     $length = strlen($content);
