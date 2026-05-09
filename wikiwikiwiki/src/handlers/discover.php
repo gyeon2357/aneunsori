@@ -84,14 +84,16 @@ function handle_my_pages(string $method, array $matches): void
 {
     require_get_method($method);
     require_login();
- 
+
     $username = (string) current_user();
- 
-    render('my-pages', [
-        'pageTitle' => '내가 쓴 글',
-        'metaTitle' => '내가 쓴 글',
-        'username'  => $username,
-        'myPages'   => page_by_author($username),
-    ]);
+    $files = glob(HISTORY_DIR . '/*.' . $username . '.txt') ?: [];
+
+    // 디버그 출력
+    echo '<pre>';
+    echo 'HISTORY_DIR: ' . HISTORY_DIR . "\n";
+    echo 'username: ' . $username . "\n";
+    echo 'matched files: ' . count($files) . "\n";
+    print_r($files);
+    echo '</pre>';
+    exit;
 }
- 
