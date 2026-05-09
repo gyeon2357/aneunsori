@@ -3,6 +3,9 @@ FROM php:8.2-apache
 # Apache 모듈 활성화 (.htaccess 지원)
 RUN a2enmod rewrite deflate expires headers
 
+# zip 익스텐션 추가
+RUN apt-get update && apt-get install -y libzip-dev && docker-php-ext-install zip
+
 # Apache가 .htaccess를 읽도록 설정
 RUN sed -i 's|AllowOverride None|AllowOverride All|g' /etc/apache2/apache2.conf
 
