@@ -231,7 +231,7 @@ button {
 }
 
 @media screen and (max-width: 899px) {
-  .header {
+  .header { 
     position: sticky;
     top: 0;
 

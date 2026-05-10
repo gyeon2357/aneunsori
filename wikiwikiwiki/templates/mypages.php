@@ -5,7 +5,7 @@ declare(strict_types=1);
 <div class="content">
   <h1><?= html($pageTitle) ?></h1>
   <?php if ($myPages === []): ?>
-    <p>아직 작성한 문서가 없습니다.</p>
+    <p><?= html(t('mypages.empty')) ?></p>
   <?php else: ?>
     <ul data-columns>
       <?php foreach ($myPages as $page): ?>

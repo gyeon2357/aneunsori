@@ -169,6 +169,8 @@
     "nav.rss": "RSS",
     "nav.search": "検索",
     "nav.settings": "設定",
+    "nav.mypages": "自分の記事",
+    "mypages.empty": "まだ記事がありません。",
     "nav.skip_to_main": "メインコンテンツへスキップ",
     "search.scope.all": "すべて",
     "search.scope.content": "内容",

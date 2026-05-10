@@ -88,8 +88,8 @@ function handle_my_pages(string $method, array $matches): void
     $username = (string) current_user();
  
     render('mypages', [
-        'pageTitle' => '내가 쓴 글',
-        'metaTitle' => '내가 쓴 글',
+        'pageTitle' => t('nav.mypages'),
+        'metaTitle' => t('nav.mypages'),
         'username'  => $username,
         'myPages'   => page_by_author($username),
     ]);
