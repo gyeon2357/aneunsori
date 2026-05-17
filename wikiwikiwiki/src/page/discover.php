@@ -386,22 +386,28 @@ function page_all_by_author(?int $limitPerPage = null): array
         return [];
     }
 
-    rsort($files);
 
-    $pageIndex = page_index_load();
-    $homePage  = defined('HOME_PAGE') ? (string) HOME_PAGE : '';
-    $byAuthor  = [];
+    sort($files);
+
+    $pageIndex    = page_index_load();
+    $homePage     = defined('HOME_PAGE') ? (string) HOME_PAGE : '';
+    $pageCreators = []; 
 
     foreach ($files as $file) {
         $basename = basename($file, '.txt');
 
-        // {base}.{14자리}.{username} 구조 파싱
         if (preg_match('/^(.+)\.(\d{14})\.([^.]+)$/', $basename, $m) !== 1) {
             continue;
         }
 
         $username = $m[3];
-        $title    = file_to_page_title($m[1] . '.txt');
+
+     
+        if ($username === '_deleted' || $username === '') {
+            continue;
+        }
+
+        $title = file_to_page_title($m[1] . '.txt');
 
         if ($title === '' || $title === $homePage) {
             continue;
@@ -412,10 +418,16 @@ function page_all_by_author(?int $limitPerPage = null): array
         if (page_index_redirect_target_for($title, $pageIndex) !== null) {
             continue;
         }
-        if (isset($byAuthor[$username]) && in_array($title, array_column($byAuthor[$username], 'title'), true)) {
-            continue;
-        }
 
+
+        if (!isset($pageCreators[$title])) {
+            $pageCreators[$title] = $username;
+        }
+    }
+
+
+    $byAuthor = [];
+    foreach ($pageCreators as $title => $username) {
         $byAuthor[$username][] = ['title' => $title];
     }
 
