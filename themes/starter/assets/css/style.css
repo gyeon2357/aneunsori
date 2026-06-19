@@ -267,7 +267,7 @@ button {
     top: 0;
 
     width: 100%;
-    padding: 1.25rem;
+    padding: 1rem;
     background: var(--document-background);
 
     z-index: 1;
@@ -307,11 +307,11 @@ button {
 
 @media screen and (max-width: 899px) {
   .main {
-    padding: 1.25rem;
+    padding: 1rem;
   }
 
   .footer {
-    padding: 1.25rem;
+    padding: 1rem;
   }
 }
 
@@ -1226,7 +1226,7 @@ button {
   color: var(--menu-text);
   background: var(--menu-background);
   border: var(--menu-border);
-  box-shadow: var(--menu-box-shadow);
+  /* box-shadow: var(--menu-box-shadow); */
 }
 
 .dropdown-content a {
